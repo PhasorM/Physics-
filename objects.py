@@ -61,19 +61,16 @@ class entity:
             self.position_old = self.position - ((x1 - x1_old)*m1 + (x2 - x2_old)*m2 + (x2 + x1_old - x1 - x2_old) * m2 * e ) * (1/(m1 + m2))
             other.position_old = other.position - ((x2 - x2_old)*m2 + (x1 - x1_old)*m1 + (x1 + x2_old - x2 - x1_old) * m1 * e ) * (1/(m1 + m2))
 
-    def Link(self, other: 'entity', d: float=5):
-        n = Vector2D.norm(other.position - self.position)
-        dist= (self.position - other.position).ab() - (self.radius + other.radius) 
-        delta = (dist - d)  
-        if delta > 0:
-            self.position= self.position + n*(delta/2)
-            other.position= other.position - n*(delta/2) 
-        # if Vector2D.ab(self.position - other.position) <= (self.radius + other.radius):            
-        #     error= (self.radius + other.radius) - (self.position - other.position).ab() 
-
-        #     if (error > 0):
-        #         self.position = self.position - n*(error/2)
-        #         other.position = other.position + n*(error/2)
+    def Link(self,other:'entity',d:float=7,type="free"):  #type can be free, pin
+        dist = (self.position - other.position).ab()
+        difference = dist - d
+        normal = (self.position - other.position).norm()
+        delta = normal * (difference)
+        if type == "free":
+            self.position = self.position - delta * 0.5
+            other.position = other.position + delta * 0.5
+        if type == "pin":
+            other.position = other.position + delta
         
             
             
