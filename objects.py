@@ -8,12 +8,12 @@ class entity:
         self.position_old = position_old
         self.mass = mass
         self.radius = radius
-    def update(self,dt:float =1.0): #verlet integration
-        temp_pos= self.position
-        self.position = self.position*2 - self.position_old + self.acceleration * dt * dt
-        self.position_old = temp_pos
-        self.acceleration = Vector2D(0,0)
         
+    def update(self,dt:float =1.0): #verlet integration
+        vel = self.position - self.position_old
+        self.position_old = self.position
+        self.position = self.position + vel + self.acceleration * (dt**2) 
+        self.acceleration = Vector2D(0,0)
 
     def accelerate(self, a: Vector2D):  #new acceleration in next frame
         self.acceleration = self.acceleration + a
